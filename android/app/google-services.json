@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "340414104792",
+    "project_id": "manul-89d18",
+    "storage_bucket": "manul-89d18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340414104792:android:316ee0c880d27f677dc3ad",
+        "android_client_info": {
+          "package_name": "com.sebastiansliwa.manul"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_lF80AoBAEzzu0B8pks5FWRWUz4UjOMg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

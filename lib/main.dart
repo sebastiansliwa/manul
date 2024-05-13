@@ -9,11 +9,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final myfield = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +29,15 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Wyszukaj'),
         ),
-        floatingActionButton: FloatingActionButton(onPressed: () {
-          FirebaseFirestore.instance
-              .collection('services')
-              .add({'title': 'Modelowanie'});
-        }),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            FirebaseFirestore.instance
+                .collection('services')
+                .add({'title': myfield.text});
+            myfield.clear();
+          },
+          child: const Icon(Icons.add),
+        ),
         body: StreamBuilder<QuerySnapshot>(
             stream:
                 FirebaseFirestore.instance.collection('services').snapshots(),
@@ -48,6 +54,10 @@ class MyApp extends StatelessWidget {
                   for (final service in services) ...[
                     ListViewItem(service['title']),
                   ],
+                  TextField(
+                    controller: myfield,
+                    style: const TextStyle(color: Colors.white70),
+                  ),
                 ],
               );
             }),

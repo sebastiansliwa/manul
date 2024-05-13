@@ -27,6 +27,11 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Wyszukaj'),
         ),
+        floatingActionButton: FloatingActionButton(onPressed: () {
+          FirebaseFirestore.instance
+              .collection('services')
+              .add({'title': 'Modelowanie'});
+        }),
         body: StreamBuilder<QuerySnapshot>(
             stream:
                 FirebaseFirestore.instance.collection('services').snapshots(),

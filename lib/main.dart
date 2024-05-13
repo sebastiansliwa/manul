@@ -37,11 +37,12 @@ class MyApp extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Text('Trwa ładowanie');
               }
-              final documents = snapshot.data!.docs;
+              final services = snapshot.data!.docs;
               return ListView(
                 children: [
-                  ListViewItem(documents[0]['title']),
-                  ListViewItem('Układanie fryzury'),
+                  for (final service in services) ...[
+                    ListViewItem(service['title']),
+                  ],
                 ],
               );
             }),
@@ -63,6 +64,9 @@ class ListViewItem extends StatelessWidget {
       color: const Color.fromARGB(255, 245, 245, 245),
       padding: const EdgeInsets.only(
         right: 20,
+      ),
+      margin: const EdgeInsets.only(
+        top: 5,
       ),
       child: Row(
         children: [Text(title)],

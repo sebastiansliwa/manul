@@ -9,11 +9,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final myfield = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,15 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Wyszukaj'),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            FirebaseFirestore.instance
+                .collection('services')
+                .add({'title': myfield.text});
+            myfield.clear();
+          },
+          child: const Icon(Icons.add),
+        ),
         body: StreamBuilder<QuerySnapshot>(
             stream:
                 FirebaseFirestore.instance.collection('services').snapshots(),
@@ -37,11 +48,16 @@ class MyApp extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Text('Trwa ładowanie');
               }
-              final documents = snapshot.data!.docs;
+              final services = snapshot.data!.docs;
               return ListView(
                 children: [
-                  ListViewItem(documents[0]['title']),
-                  ListViewItem('Układanie fryzury'),
+                  for (final service in services) ...[
+                    ListViewItem(service['title']),
+                  ],
+                  TextField(
+                    controller: myfield,
+                    style: const TextStyle(color: Colors.white70),
+                  ),
                 ],
               );
             }),
@@ -63,6 +79,9 @@ class ListViewItem extends StatelessWidget {
       color: const Color.fromARGB(255, 245, 245, 245),
       padding: const EdgeInsets.only(
         right: 20,
+      ),
+      margin: const EdgeInsets.only(
+        top: 5,
       ),
       child: Row(
         children: [Text(title)],

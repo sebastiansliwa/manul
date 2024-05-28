@@ -5,12 +5,19 @@ import 'package:flutter/material.dart';
 // import 'package:manul/features/auth/pages/auth_gate.dart';
 //import 'firebase_options.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({
     super.key,
   });
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final myfield = TextEditingController();
+
+  var currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -35,28 +42,63 @@ class HomePage extends StatelessWidget {
         },
         child: const Icon(Icons.add),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('services').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Text('Wystąpił nieoczekiwany problem');
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text('Trwa ładowanie');
-            }
-            final services = snapshot.data!.docs;
-            return ListView(
-              children: [
-                for (final service in services) ...[
-                  ListViewItem(service['title']),
+      body: Builder(builder: (context) {
+        if (currentIndex == 0) {
+          return Center(
+            child: Text('1'),
+          );
+        }
+        if (currentIndex == 1) {
+          return Center(
+            child: Text('2'),
+          );
+        }
+        if (currentIndex == 2) {
+          return Center(
+            child: Text('3'),
+          );
+        }
+
+        return StreamBuilder<QuerySnapshot>(
+            stream:
+                FirebaseFirestore.instance.collection('services').snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Wystąpił nieoczekiwany problem');
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text('Trwa ładowanie');
+              }
+              final services = snapshot.data!.docs;
+              return ListView(
+                children: [
+                  for (final service in services) ...[
+                    ListViewItem(service['title']),
+                  ],
+                  TextField(
+                    controller: myfield,
+                    style: const TextStyle(color: Colors.white70),
+                  ),
                 ],
-                TextField(
-                  controller: myfield,
-                  style: const TextStyle(color: Colors.white70),
-                ),
-              ],
-            );
-          }),
+              );
+            });
+      }),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (newIndex) {
+          setState(() {
+            currentIndex = newIndex;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search_sharp), label: 'Wyszukaj'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.add_to_photos_sharp), label: 'Dodaj usługę'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.add_home_outlined), label: 'Dodaj firmę'),
+        ],
+      ),
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 //import 'firebase_options.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({
+  const HomePage({
     super.key,
   });
 
@@ -15,73 +15,47 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final myfield = TextEditingController();
-
   var currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Wyszukaj'),
+        title: Builder(builder: (context) {
+          if (currentIndex == 1) {
+            return const Text('Dodaj usługę');
+          }
+          if (currentIndex == 2) {
+            return const Text('Dodaj firmę');
+          }
+          return const Text('Wyszukaj');
+        }),
         actions: [
-          IconButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-            },
-            icon: const Icon(Icons.logout_sharp),
-          )
+          Builder(builder: (context) {
+            if (currentIndex == 0) {
+              return IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.filter_alt_outlined),
+              );
+            }
+            return IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              icon: const Icon(Icons.logout_sharp),
+            );
+          })
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          FirebaseFirestore.instance
-              .collection('services')
-              .add({'title': myfield.text});
-          myfield.clear();
-        },
-        child: const Icon(Icons.add),
       ),
       body: Builder(builder: (context) {
         if (currentIndex == 0) {
-          return Center(
-            child: Text('1'),
-          );
+          return const SearchPageContent();
         }
         if (currentIndex == 1) {
-          return Center(
-            child: Text('2'),
-          );
-        }
-        if (currentIndex == 2) {
-          return Center(
-            child: Text('3'),
-          );
+          return AddServicesPageContent();
         }
 
-        return StreamBuilder<QuerySnapshot>(
-            stream:
-                FirebaseFirestore.instance.collection('services').snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const Text('Wystąpił nieoczekiwany problem');
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Text('Trwa ładowanie');
-              }
-              final services = snapshot.data!.docs;
-              return ListView(
-                children: [
-                  for (final service in services) ...[
-                    ListViewItem(service['title']),
-                  ],
-                  TextField(
-                    controller: myfield,
-                    style: const TextStyle(color: Colors.white70),
-                  ),
-                ],
-              );
-            });
+        return const AddCompanyPageContent();
       }),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
@@ -100,6 +74,84 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+}
+
+class AddCompanyPageContent extends StatelessWidget {
+  const AddCompanyPageContent({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('3'),
+    );
+  }
+}
+
+class AddServicesPageContent extends StatelessWidget {
+  AddServicesPageContent({
+    super.key,
+  });
+  final myfield = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('services').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Wystąpił nieoczekiwany problem');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text('Trwa ładowanie');
+          }
+          return ListView(
+            children: [
+              TextField(
+                controller: myfield,
+                style: const TextStyle(color: Colors.white70),
+              ),
+            ],
+          );
+        });
+    //       floatingActionButton: FloatingActionButton(
+    //   onPressed: () {
+    //     FirebaseFirestore.instance
+    //         .collection('services')
+    //         .add({'title': myfield.text});
+    //     myfield.clear();
+    //   },
+    //   child: const Icon(Icons.add),
+    // ),
+  }
+}
+
+class SearchPageContent extends StatelessWidget {
+  const SearchPageContent({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('services').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Wystąpił nieoczekiwany problem');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text('Trwa ładowanie');
+          }
+          final services = snapshot.data!.docs;
+          return ListView(
+            children: [
+              for (final service in services) ...[
+                ListViewItem(service['title']),
+              ],
+            ],
+          );
+        });
   }
 }
 

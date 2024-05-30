@@ -1,40 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class AddServicesPageContent extends StatelessWidget {
-  AddServicesPageContent({
+class AddServicesPageContent extends StatefulWidget {
+  const AddServicesPageContent({
     super.key,
   });
-  final myfield = TextEditingController();
+
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('services').snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text('Wystąpił nieoczekiwany problem');
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Trwa ładowanie');
-          }
-          return ListView(
-            children: [
-              TextField(
-                controller: myfield,
-                style: const TextStyle(color: Colors.white70),
-              ),
-            ],
-          );
-        });
-    //       floatingActionButton: FloatingActionButton(
-    //   onPressed: () {
-    //     FirebaseFirestore.instance
-    //         .collection('services')
-    //         .add({'title': myfield.text});
-    //     myfield.clear();
-    //   },
-    //   child: const Icon(Icons.add),
-    // ),
-  }
+  State<AddServicesPageContent> createState() => _AddServicesPageContentState();
 }
 
+class _AddServicesPageContentState extends State<AddServicesPageContent> {
+  var service = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        TextField(
+          decoration: const InputDecoration(
+            hintText: 'Podaj nazwę usługi',
+          ),
+          onChanged: (newValue) {
+            setState(() {
+              service = newValue;
+            });
+          },
+          style: const TextStyle(color: Colors.white70),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            FirebaseFirestore.instance.collection('services').add({
+              'title': service,
+            });
+          },
+          child: const Text('Dodaj'),
+        )
+      ],
+    );
+  }
+}

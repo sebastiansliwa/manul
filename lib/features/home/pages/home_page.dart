@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           return const SearchPageContent();
         }
         if (currentIndex == 1) {
-          return AddServicesPageContent();
+          return const AddServicesPageContent();
         }
 
         return const AddCompanyPageContent();

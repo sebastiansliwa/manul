@@ -12,6 +12,9 @@ class AddServicesPageContent extends StatefulWidget {
 
 class _AddServicesPageContentState extends State<AddServicesPageContent> {
   var service = '';
+  var company = '';
+  var prize = '';
+  var maxprize = '';
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +31,46 @@ class _AddServicesPageContentState extends State<AddServicesPageContent> {
           },
           style: const TextStyle(color: Colors.white70),
         ),
+        TextField(
+          decoration: const InputDecoration(
+            hintText: 'Podaj nazwę firmy',
+          ),
+          onChanged: (newValue) {
+            setState(() {
+              company = newValue;
+            });
+          },
+          style: const TextStyle(color: Colors.white70),
+        ),
+        TextField(
+          decoration: const InputDecoration(
+            hintText: 'Podaj cenę',
+          ),
+          onChanged: (newValue) {
+            setState(() {
+              prize = newValue;
+            });
+          },
+          style: const TextStyle(color: Colors.white70),
+        ),
+        TextField(
+          decoration: const InputDecoration(
+            hintText: 'Podaj cenę maksymalną',
+          ),
+          onChanged: (newValue) {
+            setState(() {
+              maxprize = newValue;
+            });
+          },
+          style: const TextStyle(color: Colors.white70),
+        ),
         ElevatedButton(
           onPressed: () {
             FirebaseFirestore.instance.collection('services').add({
-              'title': service,
+              'service': service,
+              'company': company,
+              'prize': prize,
+              'maxprize': maxprize,
             });
           },
           child: const Text('Dodaj'),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +11,10 @@ class SearchPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('services').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('services')
+            .orderBy('prize')
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text('Wystąpił nieoczekiwany problem');
@@ -17,11 +22,15 @@ class SearchPageContent extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Text('Trwa ładowanie');
           }
-          final services = snapshot.data!.docs;
+          final documents = snapshot.data!.docs;
           return ListView(
             children: [
-              for (final service in services) ...[
-                ListViewItem(service['title']),
+              for (final document in documents) ...[
+                ListViewItem(
+                  document['service'],
+                  document['company'],
+                  document['prize'],
+                ),
               ],
             ],
           );
@@ -31,10 +40,14 @@ class SearchPageContent extends StatelessWidget {
 
 class ListViewItem extends StatelessWidget {
   const ListViewItem(
-    this.title, {
+    this.service,
+    this.company,
+    this.prize, {
     super.key,
   });
-  final String title;
+  final String service;
+  final String company;
+  final String prize;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,7 +60,22 @@ class ListViewItem extends StatelessWidget {
         top: 5,
       ),
       child: Row(
-        children: [Text(title)],
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(service),
+              Text(company),
+            ],
+          ),
+          Row(
+            children: [
+              Text(prize),
+              const Text('zł'),
+            ],
+          )
+        ],
       ),
     );
   }

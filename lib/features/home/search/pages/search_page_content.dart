@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +50,7 @@ class ListViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 120,
-      color: const Color.fromARGB(255, 245, 245, 245),
+      color: const Color.fromARGB(255, 92, 95, 93),
       padding: const EdgeInsets.only(
         right: 20,
       ),

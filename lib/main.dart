@@ -21,10 +21,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         brightness: Brightness.dark,
-        textTheme: GoogleFonts.ralewayTextTheme(Theme.of(context).textTheme),
+        textTheme:
+            GoogleFonts.ralewayTextTheme(Theme.of(context).textTheme).apply(
+          bodyColor: Colors.white70,
+          displayColor: Color.fromARGB(255, 38, 174, 38), //???????
+        ),
       ),
-       home: const AuthGate(),
+      home: const AuthGate(),
     );
   }
 }
-

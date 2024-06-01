@@ -26,10 +26,21 @@ class _AddServicesPageContentState extends State<AddServicesPageContent> {
       ),
       children: [
         TextField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
             hintText: 'Podaj nazwę usługi',
-            label: Text('Nazwa Usługi'),
+            label: Row(
+              children: const [
+                Text('Nazwa usługi'),
+                Text(
+                  '*',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 30,
+                  ),
+                ),
+              ],
+            ),
           ),
           onChanged: (newValue) {
             setState(() {
@@ -39,10 +50,21 @@ class _AddServicesPageContentState extends State<AddServicesPageContent> {
         ),
         const SizedBox(height: 10),
         TextField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
             hintText: 'Podaj nazwę firmy',
-            label: Text('Nazwa Firmy'),
+            label: Row(
+              children: const [
+                Text('Nazwa firmy'),
+                Text(
+                  '*',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 30,
+                  ),
+                ),
+              ],
+            ),
           ),
           onChanged: (newValue) {
             setState(() {
@@ -75,8 +97,18 @@ class _AddServicesPageContentState extends State<AddServicesPageContent> {
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   hintText: 'np.: 50',
-                  label: Text(
-                      ispricebracket ? 'Cena minimalna w zł' : 'Cena w zł'),
+                  label: Row(
+                    children: [
+                      Text(ispricebracket ? 'Cena min. w zł' : 'Cena w zł'),
+                      const Text(
+                        '*',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 30,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 onChanged: (newValue) {
                   setState(() {
@@ -87,13 +119,17 @@ class _AddServicesPageContentState extends State<AddServicesPageContent> {
             ),
             Visibility(
               visible: ispricebracket,
+              child: const Text('-'),
+            ),
+            Visibility(
+              visible: ispricebracket,
               child: SizedBox(
                 width: 150,
                 child: TextField(
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'np. 150',
-                    label: Text('Cena maksymalna w zł'),
+                    label: Text('Cena max. w zł'),
                   ),
                   onChanged: (newValue) {
                     setState(() {
@@ -106,6 +142,22 @@ class _AddServicesPageContentState extends State<AddServicesPageContent> {
           ],
         ),
         const SizedBox(height: 10),
+        Row(
+          children: const [
+            Text(
+              '*',
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 30,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                'Wymagane pola do odblokowania przycisku "DODAJ".',
+              ),
+            )
+          ],
+        ),
         const SizedBox(height: 10),
         ElevatedButton(
           onPressed: service.isEmpty || company.isEmpty || prize.isEmpty

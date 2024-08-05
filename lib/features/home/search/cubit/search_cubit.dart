@@ -5,5 +5,10 @@ import 'package:meta/meta.dart';
 part 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit() : super(SearchState(documents: const[]));
+  SearchCubit()
+      : super(const SearchState(
+          documents: [],
+          errorMessage: '',
+          isLoading: false,
+        ));
 }

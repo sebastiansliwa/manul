@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:manul/features/home/search/cubit/search_cubit.dart';
 
 class SearchPageContent extends StatelessWidget {
   const SearchPageContent({
@@ -8,31 +10,38 @@ class SearchPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('services')
-            .orderBy('prize')
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text('Wystąpił nieoczekiwany problem');
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Trwa ładowanie');
-          }
-          final documents = snapshot.data!.docs;
-          return ListView(
-            children: [
-              for (final document in documents) ...[
-                ListViewItem(
-                  document['service'],
-                  document['company'],
-                  document['prize'],
-                ),
-              ],
-            ],
-          );
-        });
+    return BlocProvider(
+      create: (context) => SearchCubit(),
+      child: BlocBuilder<SearchCubit, SearchState>(
+        builder: (context, state) {
+          return StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('services')
+                  .orderBy('prize')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Text('Wystąpił nieoczekiwany problem');
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Text('Trwa ładowanie');
+                }
+                final documents = snapshot.data!.docs;
+                return ListView(
+                  children: [
+                    for (final document in documents) ...[
+                      ListViewItem(
+                        document['service'],
+                        document['company'],
+                        document['prize'],
+                      ),
+                    ],
+                  ],
+                );
+              });
+        },
+      ),
+    );
   }
 }
 

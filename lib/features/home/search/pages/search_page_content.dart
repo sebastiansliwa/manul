@@ -14,6 +14,24 @@ class SearchPageContent extends StatelessWidget {
       create: (context) => SearchCubit(),
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
+          if (state.errorMessage.isNotEmpty) {
+                  return Text('Wystąpił nieoczekiwany problem: ${state.errorMessage}');
+                }
+                if (state.isLoading) {
+                  return const  Center (child: CircularProgressIndicator());
+                }
+                final documents = state.documents;
+                return ListView(
+                  children: [
+                    for (final document in documents) ...[
+                      ListViewItem(
+                        document['service'],
+                        document['company'],
+                        document['prize'],
+                      ),
+                    ],
+                  ],
+                );
           return StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('services')

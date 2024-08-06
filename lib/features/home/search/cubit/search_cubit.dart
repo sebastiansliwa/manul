@@ -11,4 +11,14 @@ class SearchCubit extends Cubit<SearchState> {
           errorMessage: '',
           isLoading: false,
         ));
+
+  Future<void> start() async {
+    emit(
+      const SearchState(
+        documents: [],
+        errorMessage: '',
+        isLoading: false,
+      ),
+    );
+  }
 }

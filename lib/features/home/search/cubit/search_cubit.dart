@@ -49,6 +49,23 @@ class SearchCubit extends Cubit<SearchState> {
       });
   }
 
+//przenieść
+  Future<void> remove({required String documentID}) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('services')
+          .doc(documentID)
+          .delete();
+    } catch (error) {
+      emit(SearchState(
+        documents: [],
+        isLoading: false,
+        errorMessage: error.toString(),
+      ));
+      start();
+    }
+  }
+
   @override
   Future<void> close() {
     _streamSubscription?.cancel();

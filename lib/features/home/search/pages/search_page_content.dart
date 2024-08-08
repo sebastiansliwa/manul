@@ -24,10 +24,34 @@ class SearchPageContent extends StatelessWidget {
           return ListView(
             children: [
               for (final document in documents) ...[
-                ListViewItem(
-                  document['service'],
-                  document['company'],
-                  document['prize'],
+                Dismissible(
+                  key: ValueKey(document.id),
+                  background: const DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 32.0),
+                        child: Icon(
+                          Icons.delete,
+                        ),
+                      ),
+                    ),
+                  ),
+                  confirmDismiss: (direction) async {
+                    // only from right to left
+                    return direction == DismissDirection.endToStart;
+                  },
+                  onDismissed: (direction) {
+                    context.read<SearchCubit>().remove(documentID: document.id);
+                  },
+                  child: ListViewItem(
+                    document['service'],
+                    document['company'],
+                    document['prize'],
+                  ),
                 ),
               ],
             ],

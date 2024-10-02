@@ -23,167 +23,181 @@ class _AddServicesPageContentState extends State<AddServicesPageContent> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AddServicesCubit(),
-      child: BlocBuilder<AddServicesCubit, AddServicesState>(
-        builder: (context, state) {
-          return ListView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 20,
-            ),
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  hintText: 'Podaj nazwę usługi',
-                  label: Row(
-                    children: const [
-                      Text('Nazwa usługi'),
-                      Text(
-                        '*',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 30,
+      child: BlocListener<AddServicesCubit, AddServicesState>(
+        listener: (context, state) {
+          if (state.saved) {
+            // \\ czyszczenie odpowiednich tekstfieldów
+          }
+          if (state.errorMessage.isNotEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage),
+              ),
+            );
+          }
+        },
+        child: BlocBuilder<AddServicesCubit, AddServicesState>(
+          builder: (context, state) {
+            return ListView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 20,
+              ),
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: 'Podaj nazwę usługi',
+                    label: Row(
+                      children: const [
+                        Text('Nazwa usługi'),
+                        Text(
+                          '*',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 30,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _service = newValue;
+                    });
+                  },
                 ),
-                onChanged: (newValue) {
-                  setState(() {
-                    _service = newValue;
-                  });
-                },
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  hintText: 'Podaj nazwę firmy',
-                  label: Row(
-                    children: const [
-                      Text('Nazwa firmy'),
-                      Text(
-                        '*',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 30,
+                const SizedBox(height: 10),
+                TextField(
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: 'Podaj nazwę firmy',
+                    label: Row(
+                      children: const [
+                        Text('Nazwa firmy'),
+                        Text(
+                          '*',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 30,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _company = newValue;
+                    });
+                  },
                 ),
-                onChanged: (newValue) {
-                  setState(() {
-                    _company = newValue;
-                  });
-                },
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  const Text(
-                    'Przedział cenowy',
-                  ),
-                  Switch(
-                    value: ispricebracket,
-                    onChanged: (newValue) {
-                      setState(() {
-                        ispricebracket = newValue;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: 150,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        hintText: 'np.: 50',
-                        label: Row(
-                          children: [
-                            Text(ispricebracket
-                                ? 'Cena min. w zł'
-                                : 'Cena w zł'),
-                            const Text(
-                              '*',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 30,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Text(
+                      'Przedział cenowy',
+                    ),
+                    Switch(
+                      value: ispricebracket,
                       onChanged: (newValue) {
                         setState(() {
-                          _prize = newValue;
+                          ispricebracket = newValue;
                         });
                       },
                     ),
-                  ),
-                  Visibility(
-                    visible: ispricebracket,
-                    child: const Text('-'),
-                  ),
-                  Visibility(
-                    visible: ispricebracket,
-                    child: SizedBox(
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
                       width: 150,
                       child: TextField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'np. 150',
-                          label: Text('Cena max. w zł'),
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          hintText: 'np.: 50',
+                          label: Row(
+                            children: [
+                              Text(ispricebracket
+                                  ? 'Cena min. w zł'
+                                  : 'Cena w zł'),
+                              const Text(
+                                '*',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 30,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         onChanged: (newValue) {
                           setState(() {
-                            _maxprize = newValue;
+                            _prize = newValue;
                           });
                         },
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: const [
-                  Text(
-                    '*',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 30,
+                    Visibility(
+                      visible: ispricebracket,
+                      child: const Text('-'),
                     ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Wymagane pola do odblokowania przycisku "DODAJ".',
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed:
-                    _service == null || _company == null || _prize == null
-                        ? null
-                        : () {
-                            context.read<AddServicesCubit>().add(
-                                  _service!,
-                                  _company!,
-                                  _prize!,
-                                  _maxprize ?? '',
-                                );
+                    Visibility(
+                      visible: ispricebracket,
+                      child: SizedBox(
+                        width: 150,
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'np. 150',
+                            label: Text('Cena max. w zł'),
+                          ),
+                          onChanged: (newValue) {
+                            setState(() {
+                              _maxprize = newValue;
+                            });
                           },
-                child: const Text('Dodaj'),
-              )
-            ],
-          );
-        },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: const [
+                    Text(
+                      '*',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 30,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Wymagane pola do odblokowania przycisku "DODAJ".',
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed:
+                      _service == null || _company == null || _prize == null
+                          ? null
+                          : () {
+                              context.read<AddServicesCubit>().add(
+                                    _service!,
+                                    _company!,
+                                    _prize!,
+                                    _maxprize ?? '',
+                                  );
+                            },
+                  child: const Text('Dodaj'),
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }

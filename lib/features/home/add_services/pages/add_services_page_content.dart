@@ -13,10 +13,10 @@ class AddServicesPageContent extends StatefulWidget {
 }
 
 class _AddServicesPageContentState extends State<AddServicesPageContent> {
-  String? _service;
+  String? _title;
   String? _company;
   String? _prize;
-  String? _maxprize;
+  String? _maxPrize;
   bool ispricebracket = false;
 
   @override
@@ -63,7 +63,7 @@ class _AddServicesPageContentState extends State<AddServicesPageContent> {
                   ),
                   onChanged: (newValue) {
                     setState(() {
-                      _service = newValue;
+                      _title = newValue;
                     });
                   },
                 ),
@@ -154,7 +154,7 @@ class _AddServicesPageContentState extends State<AddServicesPageContent> {
                           ),
                           onChanged: (newValue) {
                             setState(() {
-                              _maxprize = newValue;
+                              _maxPrize = newValue;
                             });
                           },
                         ),
@@ -182,14 +182,14 @@ class _AddServicesPageContentState extends State<AddServicesPageContent> {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed:
-                      _service == null || _company == null || _prize == null
+                      _title == null || _company == null || _prize == null
                           ? null
                           : () {
                               context.read<AddServicesCubit>().add(
-                                    _service!,
+                                    _title!,
                                     _company!,
                                     _prize!,
-                                    _maxprize ?? '',
+                                    _maxPrize ?? '',
                                   );
                             },
                   child: const Text('Dodaj'),

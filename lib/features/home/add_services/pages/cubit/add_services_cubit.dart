@@ -9,18 +9,18 @@ class AddServicesCubit extends Cubit<AddServicesState> {
   AddServicesCubit() : super(const AddServicesState());
 
   Future<void> add(
-    String service,
+    String title,
     String company,
     String prize,
-    String maxprize,
+    String maxPrize,
   ) async {
     try {
       await FirebaseFirestore.instance.collection('services').add(
         {
-          'service': service,
+          'title': title,
           'company': company,
           'prize': prize,
-          'maxprize': maxprize,
+          'max_prize': maxPrize,
         },
       );
       emit(const AddServicesState(saved: true));

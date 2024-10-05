@@ -2,24 +2,20 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:manul/models/service_model.dart';
 import 'package:meta/meta.dart';
 
 part 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit()
-      : super(const SearchState(
-          documents: [],
-          isLoading: false,
-          errorMessage: '',
-        ));
+  SearchCubit() : super(const SearchState());
 
   StreamSubscription? _streamSubscription;
 
   Future<void> start() async {
     emit(
       const SearchState(
-        documents: [],
+        services: [],
         isLoading: true,
         errorMessage: '',
       ),
@@ -29,19 +25,23 @@ class SearchCubit extends Cubit<SearchState> {
         .collection('services')
         .orderBy('prize')
         .snapshots()
-        .listen((data) {
-      emit(
-        SearchState(
-          documents: data.docs,
-          isLoading: false,
-          errorMessage: '',
-        ),
-      );
-    })
-      ..onError((error) {
+        .listen(
+      (services) {
+        final serviceModels = services.docs.map((doc) {
+          return ServiceModel(
+            id: doc.id,
+            title: doc['title'],
+            company: doc['company'],
+            prize: doc['prize'],
+            maxPrize: doc['maxprize'],
+          );
+        }).toList();
+        emit(SearchState(services: serviceModels));
+      },
+    )..onError((error) {
         emit(
           SearchState(
-            documents: [],
+            services: [],
             isLoading: false,
             errorMessage: error.toString(),
           ),
@@ -58,7 +58,7 @@ class SearchCubit extends Cubit<SearchState> {
           .delete();
     } catch (error) {
       emit(SearchState(
-        documents: [],
+        services: [],
         isLoading: false,
         errorMessage: error.toString(),
       ));

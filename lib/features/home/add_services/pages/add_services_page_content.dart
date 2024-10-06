@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:manul/features/home/add_services/pages/cubit/add_services_cubit.dart';
+import 'package:manul/repository/service_repository.dart';
 
 class AddServicesPageContent extends StatefulWidget {
   const AddServicesPageContent({
@@ -22,7 +22,7 @@ class _AddServicesPageContentState extends State<AddServicesPageContent> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AddServicesCubit(),
+      create: (context) => AddServicesCubit(ServiceRepository()),
       child: BlocListener<AddServicesCubit, AddServicesState>(
         listener: (context, state) {
           if (state.saved) {

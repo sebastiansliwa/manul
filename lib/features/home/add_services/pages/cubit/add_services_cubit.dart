@@ -1,12 +1,12 @@
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
+import 'package:manul/repository/service_repository.dart';
 
 part 'add_services_state.dart';
 
 class AddServicesCubit extends Cubit<AddServicesState> {
-  AddServicesCubit() : super(const AddServicesState());
+  AddServicesCubit(this._serviceRepository) : super(const AddServicesState());
+
+  final ServiceRepository _serviceRepository;
 
   Future<void> add(
     String title,
@@ -15,14 +15,7 @@ class AddServicesCubit extends Cubit<AddServicesState> {
     String maxPrize,
   ) async {
     try {
-      await FirebaseFirestore.instance.collection('services').add(
-        {
-          'title': title,
-          'company': company,
-          'prize': prize,
-          'max_prize': maxPrize,
-        },
-      );
+      await _serviceRepository.add(title, company, prize, maxPrize);
       emit(const AddServicesState(saved: true));
     } catch (error) {
       emit(AddServicesState(

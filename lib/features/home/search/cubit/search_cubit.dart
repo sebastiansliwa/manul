@@ -1,47 +1,37 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:manul/models/service_model.dart';
+import 'package:manul/repository/service_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit() : super(const SearchState());
+  SearchCubit(this._serviceRepository) : super(const SearchState());
+
+  final ServiceRepository _serviceRepository;
 
   StreamSubscription? _streamSubscription;
 
   Future<void> start() async {
-    emit(
-      const SearchState(
-        services: [],
-        isLoading: true,
-        errorMessage: '',
-      ),
-    );
+    // emit(
+    //   const SearchState(
+    //     services: [],
+    //     isLoading: true,
+    //     errorMessage: '',
+    //   ),
+    // );
 
-    _streamSubscription = FirebaseFirestore.instance
-        .collection('services')
-        .orderBy('prize')
-        .snapshots()
-        .listen(
+    _streamSubscription = _serviceRepository.getServicesStream().listen(
       (services) {
-        final serviceModels = services.docs.map((doc) {
-          return ServiceModel(
-            id: doc.id,
-            title: doc['title'],
-            company: doc['company'],
-            prize: doc['prize'],
-            maxPrize: doc['maxprize'],
-          );
-        }).toList();
-        emit(SearchState(services: serviceModels));
+        emit(SearchState(services: services));
       },
     )..onError((error) {
         emit(
           SearchState(
-            services: [],
+            services: const [],
             isLoading: false,
             errorMessage: error.toString(),
           ),
@@ -52,13 +42,10 @@ class SearchCubit extends Cubit<SearchState> {
 //przenieść
   Future<void> remove({required String documentID}) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('services')
-          .doc(documentID)
-          .delete();
+      await _serviceRepository.delete(id: documentID);
     } catch (error) {
       emit(SearchState(
-        services: [],
+        services: const [],
         isLoading: false,
         errorMessage: error.toString(),
       ));

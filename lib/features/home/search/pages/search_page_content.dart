@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:manul/features/home/search/cubit/search_cubit.dart';
 import 'package:manul/models/service_model.dart';
+import 'package:manul/repository/service_repository.dart';
 
 class SearchPageContent extends StatelessWidget {
   const SearchPageContent({
@@ -13,7 +14,7 @@ class SearchPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SearchCubit()..start(),
+      create: (context) => SearchCubit(ServiceRepository())..start(),
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
           if (state.errorMessage.isNotEmpty) {

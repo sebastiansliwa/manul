@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         textTheme:
             GoogleFonts.ralewayTextTheme(Theme.of(context).textTheme).apply(
           bodyColor: Colors.white70,
-          displayColor: Color.fromARGB(255, 38, 174, 38), //???????
+          displayColor:  const Color.fromARGB(255, 38, 174, 38), //???????
         ),
       ),
       home: const AuthGate(),

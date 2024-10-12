@@ -8,7 +8,7 @@ class AddCompanyCubit extends Cubit<AddCompanyState> {
 
   final CompanyRepository _companyRepository;
 
-  Future<void> add(
+  Future<void> addCompany(
     String businessName,
     String webside,
     String location,
@@ -16,7 +16,7 @@ class AddCompanyCubit extends Cubit<AddCompanyState> {
     String district,
   ) async {
     try {
-      await _companyRepository.add(
+      await _companyRepository.addCompany(
           businessName, webside, location, city, district);
       emit(const AddCompanyState(saved: true));
     } catch (error) {

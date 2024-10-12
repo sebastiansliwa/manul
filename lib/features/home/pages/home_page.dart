@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:manul/features/home/add_company/pages/add_company_page_content.dart';
 import 'package:manul/features/home/add_services/pages/add_services_page_content.dart';
+import 'package:manul/features/home/my_account/pages/my_account_page_content.dart';
 import 'package:manul/features/home/search/pages/search_page_content.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,6 +27,9 @@ class _HomePageState extends State<HomePage> {
           }
           if (currentIndex == 2) {
             return const Text('Dodaj firmę');
+          }
+          if (currentIndex == 3) {
+            return const Text('Moje konto');
           }
           return const Text('Wyszukaj');
         }),
@@ -53,8 +57,10 @@ class _HomePageState extends State<HomePage> {
         if (currentIndex == 1) {
           return const AddServicesPageContent();
         }
-
-        return const AddCompanyPageContent();
+        if (currentIndex == 2) {
+          return const AddCompanyPageContent();
+        }
+        return const MyAccountPageContent();
       }),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
@@ -70,6 +76,8 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.add_to_photos_sharp), label: 'Dodaj usługę'),
           BottomNavigationBarItem(
               icon: Icon(Icons.add_home_outlined), label: 'Dodaj firmę'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_balance_outlined), label: 'Moje konto'),
         ],
       ),
     );

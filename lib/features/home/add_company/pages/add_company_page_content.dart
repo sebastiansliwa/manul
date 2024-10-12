@@ -208,7 +208,7 @@ class _AddCompanyPageContentState extends State<AddCompanyPageContent> {
                       _businessName == null || _webside == null || _city == null
                           ? null
                           : () {
-                              context.read<AddCompanyCubit>().add(
+                              context.read<AddCompanyCubit>().addCompany(
                                     _businessName!,
                                     _webside!,
                                     _location!,

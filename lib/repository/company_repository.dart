@@ -1,12 +1,11 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:manul/models/company_model.dart';
 
 class CompanyRepository {
-  Stream<List<CompanyModel>> getServicesStream() {
+  Stream<List<CompanyModel>> getCompaniesStream() {
     return FirebaseFirestore.instance
         .collection('company')
-        .orderBy('prize')
+        //.orderBy('prize')
         .snapshots()
         .map((querySnapshot) {
       return querySnapshot.docs.map(
@@ -24,11 +23,11 @@ class CompanyRepository {
     });
   }
 
-  Future<void> delete({required String id}) {
+  Future<void> deleteCompany({required String id}) {
     return FirebaseFirestore.instance.collection('company').doc(id).delete();
   }
 
-  Future<void> add(
+  Future<void> addCompany(
     String businessName,
     String webside,
     String location,
